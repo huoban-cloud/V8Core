@@ -33,7 +33,7 @@
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
@@ -76,7 +76,7 @@
     <LibraryPath>D:\vcpkg\installed\x86-windows-static\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LinkIncremental>true</LinkIncremental>
+    <LinkIncremental>false</LinkIncremental>
     <IncludePath>D:\vcpkg\installed\x86-windows-static\include\include;C:\Program Files (x86)\Windows Kits\10\Debuggers\inc;$(IncludePath)</IncludePath>
     <ReferencePath>D:\vcpkg\installed\x86-windows-static\include\include;D:\vcpkg\installed\x86-windows-static\lib;C:\Program Files (x86)\Windows Kits\10\Debuggers\inc;C:\Program Files (x86)\Windows Kits\10\Debuggers\lib;C:\Program Files (x86)\Windows Kits\10\Debuggers\lib\x86;$(ReferencePath)</ReferencePath>
     <LibraryPath>D:\vcpkg\installed\x86-windows-static\lib;C:\Program Files (x86)\Windows Kits\10\Debuggers\lib\x86;C:\Program Files (x86)\Windows Kits\10\Debuggers\lib;$(LibraryPath)</LibraryPath>
@@ -93,12 +93,11 @@
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <VcpkgUseStatic>true</VcpkgUseStatic>
-    <VcpkgTriplet>x86-windows-static-md</VcpkgTriplet>
     <VcpkgConfiguration>Release</VcpkgConfiguration>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <VcpkgUseStatic>true</VcpkgUseStatic>
-    <VcpkgTriplet>x86-windows-static-md</VcpkgTriplet>
+    <VcpkgTriplet>$(VcpkgTriplet)</VcpkgTriplet>
     <VcpkgConfiguration>Debug</VcpkgConfiguration>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
