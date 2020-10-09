@@ -64,9 +64,11 @@ const char* print_js_exception(v8::Isolate* isolate, v8::TryCatch* try_catch, in
     if (result.length() > 0)
     {
         err_length = result.length();
-        const char* err = (const char*)malloc(err_length + 1);
-        std::memset((void*)err, 0, err_length + 1);
-        std::memmove((void*)err, result.c_str(), err_length);
+        const char* err = (const char*)new char[err_length + 1];
+        if (err != 0) {
+            std::memset((void*)err, 0, err_length + 1);
+            std::memmove((void*)err, result.c_str(), err_length);
+        }
         return err;
     }
     else
@@ -115,7 +117,7 @@ v8_init()
     platform = v8::platform::NewDefaultPlatform();
     v8::V8::InitializePlatform(platform.get());
     v8::V8::Initialize();
-
+    
     create_params.array_buffer_allocator =
         v8::ArrayBuffer::Allocator::NewDefaultAllocator();
     create_params.allow_atomics_wait = true;
@@ -183,16 +185,33 @@ v8_eval(v8::Global<v8::Context>* context, const char* code, int code_length, con
             output_length = result_string.length();
             if (output_length > 0)
             {
-                output = (const char*)malloc(output_length + 1);
+                output = (const char*)new char[output_length + 1];
                 std::memset((void*)output, 0, output_length + 1);
                 std::memmove((void*)output, *result_string, result_string.length());
             }
             return true;
         }
     }
+
     err = print_js_exception(isolate, &try_catch, err_length);
     return false;
 }
+
+
+EXTERN_C
+__declspec(dllexport)
+void
+WINAPI
+v8_free_string(const char*& ptr)
+{
+    if (ptr != nullptr)
+    {
+        delete ptr;
+        ptr = nullptr;
+    }
+}
+
+
 /*
 void main()
 {
