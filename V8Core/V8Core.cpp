@@ -2,9 +2,11 @@
 
 // V8Core.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
-
 #include "pch.h"
+
 #include "V8Core.h"
+
+
 
 const char* print_js_exception(v8::Isolate* isolate, v8::TryCatch* try_catch, int& err_length)
 {
@@ -75,6 +77,7 @@ const char* print_js_exception(v8::Isolate* isolate, v8::TryCatch* try_catch, in
     }
 
 }
+
 
 EXTERN_C
 __declspec(dllexport)
@@ -154,7 +157,7 @@ v8_free_context(v8::Global<v8::Context>* context)
 
 EXTERN_C
 __declspec(dllexport)
-int
+bool
 WINAPI
 v8_eval(v8::Global<v8::Context>* context, const char* code, int code_length, const char*& output, int& output_length, const char*& err, int& err_length)
 {
@@ -170,30 +173,28 @@ v8_eval(v8::Global<v8::Context>* context, const char* code, int code_length, con
     err = nullptr;
     err_length = 0;
 
-   
     v8::Local<v8::String> _code = v8::String::NewFromUtf8(isolate, code, v8::NewStringType::kNormal, code_length).ToLocalChecked();
     v8::MaybeLocal<v8::Script> script = v8::Script::Compile(local_context, _code);
 
     if (!script.IsEmpty())
     {
         v8::MaybeLocal<v8::Value> result = script.ToLocalChecked()->Run(local_context);
-        
         if (!result.IsEmpty())
         {
             v8::String::Utf8Value result_string(isolate, result.ToLocalChecked()->ToString(local_context).ToLocalChecked());
             output_length = result_string.length();
-
             if (output_length > 0)
             {
                 output = (const char*)new char[output_length + 1];
                 std::memset((void*)output, 0, output_length + 1);
                 std::memmove((void*)output, *result_string, result_string.length());
             }
-            return 1;
+            return true;
         }
     }
+
     err = print_js_exception(isolate, &try_catch, err_length);
-    return 0;
+    return false;
 }
 
 
