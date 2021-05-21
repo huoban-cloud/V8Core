@@ -23,19 +23,19 @@
     <Keyword>Win32Proj</Keyword>
     <ProjectGuid>{f7780b58-9c1d-4d54-83d9-80cfbe7a0aa3}</ProjectGuid>
     <RootNamespace>V8Core</RootNamespace>
-    <WindowsTargetPlatformVersion>7.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v141_xp</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v141_xp</PlatformToolset>
+    <PlatformToolset>v142</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -71,15 +71,15 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\vcpkg\installed\x86-windows\include\include;D:\vcpkg\installed\x86-windows-static\include\include;$(IncludePath)</IncludePath>
-    <ReferencePath>D:\vcpkg\installed\x86-windows-static\lib;D:\vcpkg\installed\x86-windows-static\include\include;D:\vcpkg\installed\x86-windows-static\include</ReferencePath>
-    <LibraryPath>D:\vcpkg\installed\x86-windows-static\lib;$(LibraryPath)</LibraryPath>
+    <LibraryPath>D:\vcpkg\installed\x86-windows\lib;$(LibraryPath)</LibraryPath>
+    <ReferencePath>D:\vcpkg\installed\x86-windows\include;D:\vcpkg\installed\x86-windows\include\include;$(ReferencePath)</ReferencePath>
+    <IncludePath>D:\vcpkg\installed\x86-windows\include;D:\vcpkg\installed\x86-windows\include\include;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\vcpkg\installed\x86-windows-static\include\include;C:\Program Files (x86)\Windows Kits\10\Debuggers\inc;$(IncludePath)</IncludePath>
-    <ReferencePath>D:\vcpkg\installed\x86-windows-static\include\include;D:\vcpkg\installed\x86-windows-static\lib;C:\Program Files (x86)\Windows Kits\10\Debuggers\inc;C:\Program Files (x86)\Windows Kits\10\Debuggers\lib;C:\Program Files (x86)\Windows Kits\10\Debuggers\lib\x86;$(ReferencePath)</ReferencePath>
-    <LibraryPath>D:\vcpkg\installed\x86-windows-static\lib;C:\Program Files (x86)\Windows Kits\10\Debuggers\lib\x86;C:\Program Files (x86)\Windows Kits\10\Debuggers\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\vcpkg\installed\x86-windows-static\include\include;D:\vcpkg\installed\x86-windows-static\include;D:\vcpkg\installed\x86-windows\include\include;$(IncludePath)</IncludePath>
+    <ReferencePath>D:\vcpkg\installed\x86-windows-static\include;D:\vcpkg\installed\x86-windows\include\include;$(ReferencePath)</ReferencePath>
+    <LibraryPath>D:\vcpkg\installed\x86-windows-static\lib;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -114,7 +114,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>Winmm.lib;dbghelp.lib;dbgeng.lib;icudt.lib;icuin.lib;icuio.lib;icutu.lib;icuuc.lib;zlib.lib;v8_monolith.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Winmm.lib;dbghelp.lib;dbgeng.lib;v8.dll.lib;v8_libbase.dll.lib;v8_libplatform.dll.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -131,7 +131,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <EnableUAC>false</EnableUAC>
-      <AdditionalDependencies>Winmm.lib;dbghelp.lib;dbgeng.lib;icudt.lib;icuin.lib;icuio.lib;icutu.lib;icuuc.lib;zlib.lib;v8_monolith.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Winmm.lib;dbghelp.lib;dbgeng.lib;v8_monolith.lib;libcmt.lib;icudt.lib;icuin.lib;icuio.lib;icutu.lib;icuuc.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -173,8 +173,6 @@
     <ClCompile Include="V8Core.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\snapshot_blob.h" />
-    <ClInclude Include="Include\snapshot_blob_dbg.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="V8Core.h" />
   </ItemGroup>

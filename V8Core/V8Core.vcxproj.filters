@@ -23,12 +23,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Include\snapshot_blob.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\snapshot_blob_dbg.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="pch.h">
       <Filter>头文件</Filter>
     </ClInclude>

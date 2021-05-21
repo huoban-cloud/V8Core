@@ -4,7 +4,13 @@
 //
 #include "pch.h"
 
-#include "V8Core.h"
+#include <Windows.h>
+#include <libplatform/libplatform.h>
+#include <v8.h>
+
+
+v8::StartupData* snapshot_blob = nullptr;
+std::unique_ptr<v8::Platform> platform;
 
 
 
@@ -83,53 +89,53 @@ EXTERN_C
 __declspec(dllexport)
 void
 WINAPI
-v8_uninit()
+v8_init()
 {
-    if (isolate != nullptr) {
-        isolate->Dispose();
-        v8::V8::Dispose();
-        v8::V8::ShutdownPlatform();
-        platform.release();
-        delete create_params.array_buffer_allocator;
-    }
+    platform = v8::platform::NewDefaultPlatform();
+    v8::V8::InitializePlatform(platform.get());
+    v8::V8::Initialize();
+    return;
 }
 
 EXTERN_C
 __declspec(dllexport)
 void
 WINAPI
-v8_init()
+v8_uninit()
 {
-    if (isolate != nullptr)
-    {
-        return;
-    }
+    // v8::V8::Dispose();
+    v8::V8::ShutdownPlatform();
+    platform.release();
+}
 
-    // 有些版本要用，有些又不要
-
-    /*
-    snapshot_blob = new v8::StartupData();
-    snapshot_blob->data = (char*)&snapshot_data;
-    snapshot_blob->raw_size = snapshot_data_size;
-    v8::V8::SetSnapshotDataBlob(snapshot_blob);
-    */
-
-    platform = v8::platform::NewDefaultPlatform();
-    v8::V8::InitializePlatform(platform.get());
-    v8::V8::Initialize();
-    
+EXTERN_C
+__declspec(dllexport)
+v8::Isolate*
+WINAPI
+v8_new_isolate()
+{
+    v8::Isolate::CreateParams create_params;
     create_params.array_buffer_allocator =
         v8::ArrayBuffer::Allocator::NewDefaultAllocator();
-    create_params.allow_atomics_wait = true;
-    isolate = v8::Isolate::New(create_params);
-    return;
+    v8::Isolate* isolate = v8::Isolate::New(create_params);
+    return isolate;
 }
+
+EXTERN_C
+__declspec(dllexport)
+void
+WINAPI
+v8_free_isolate(v8::Isolate* isolate)
+{
+    isolate->Dispose();
+}
+
 
 EXTERN_C
 __declspec(dllexport)
 v8::Global<v8::Context>*
 WINAPI
-v8_new_context()
+v8_new_context(v8::Isolate* isolate)
 {
     v8::Locker locker(isolate);
     v8::Isolate::Scope isolate_scope(isolate);
@@ -145,7 +151,7 @@ EXTERN_C
 __declspec(dllexport)
 void
 WINAPI
-v8_free_context(v8::Global<v8::Context>* context)
+v8_free_context(v8::Isolate* isolate, v8::Global<v8::Context>* context)
 {
     v8::Locker locker(isolate);
     v8::Isolate::Scope isolate_scope(isolate);
@@ -159,7 +165,7 @@ EXTERN_C
 __declspec(dllexport)
 bool
 WINAPI
-v8_eval(v8::Global<v8::Context>* context, const char* code, int code_length, const char*& output, int& output_length, const char*& err, int& err_length)
+v8_eval(v8::Isolate* isolate, v8::Global<v8::Context>* context, const char* code, int code_length, const char*& output, int& output_length, const char*& err, int& err_length)
 {
     v8::Locker locker(isolate);
     v8::Isolate::Scope isolate_scope(isolate);
@@ -185,7 +191,7 @@ v8_eval(v8::Global<v8::Context>* context, const char* code, int code_length, con
             output_length = result_string.length();
             if (output_length > 0)
             {
-                output = (const char*)new char[output_length + 1];
+                output = (const char*)malloc(output_length + 1);
                 std::memset((void*)output, 0, output_length + 1);
                 std::memmove((void*)output, *result_string, result_string.length());
             }
@@ -202,27 +208,10 @@ EXTERN_C
 __declspec(dllexport)
 void
 WINAPI
-v8_free_string(const char*& ptr)
+v8_free_mem(const char* ptr)
 {
     if (ptr != nullptr)
     {
-        delete ptr;
-        ptr = nullptr;
+        free((void*)ptr);
     }
 }
-
-
-/*
-void main()
-{
-    v8_init();
-    auto ctx = v8_new_context();
-    const char code[] = "var a=1";
-    const char* output = nullptr;
-    int len = 0;
-    const char* err = 0;
-    int err_length = 0;
-    v8_eval(ctx, code, strlen(code), output, len, err, err_length);
-    v8_free_context(ctx);
-}
-*/

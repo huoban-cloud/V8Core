@@ -3,9 +3,7 @@
 
 
 #include <iostream>
-#include <Windows.h>
-#include <libplatform/libplatform.h>
-#include <v8.h>
+
 
 
 /*
@@ -17,8 +15,3 @@
 
 */
 
-v8::StartupData* snapshot_blob = nullptr;
-v8::Isolate* isolate = nullptr;
-
-std::unique_ptr<v8::Platform> platform;
-v8::Isolate::CreateParams create_params;
