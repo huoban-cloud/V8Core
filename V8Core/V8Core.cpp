@@ -25,7 +25,7 @@ const char* print_js_exception(v8::Isolate* isolate, v8::TryCatch* try_catch, in
         // V8 didn't provide any extra information about this error; just
         // print the exception.
         result.append(*exception_string);
-        result.append("\r\n");
+        result.append("\n");
     }
     else {
         // Print (filename):(line number): (message).
@@ -36,7 +36,7 @@ const char* print_js_exception(v8::Isolate* isolate, v8::TryCatch* try_catch, in
         int linenum = message->GetLineNumber(context).FromJust();
 
         result.append(*exception_string);
-        result.append("\r\n");
+        result.append("\n");
 
         // Print line of source code.
         v8::String::Utf8Value sourceline(
@@ -44,7 +44,7 @@ const char* print_js_exception(v8::Isolate* isolate, v8::TryCatch* try_catch, in
         const char* sourceline_string = *sourceline;
 
         result.append(sourceline_string);
-        result.append("\r\n");
+        result.append("\n");
 
         // Print wavy underline (GetUnderline is deprecated).
         int start = message->GetStartColumn(context).FromJust();
@@ -55,7 +55,7 @@ const char* print_js_exception(v8::Isolate* isolate, v8::TryCatch* try_catch, in
         for (int i = start; i < end; i++) {
             result.append("^");
         }
-        result.append("\r\n");
+        result.append("\n");
         v8::Local<v8::Value> stack_trace_string;
         if (try_catch->StackTrace(context).ToLocal(&stack_trace_string) &&
             stack_trace_string->IsString() &&
@@ -63,7 +63,7 @@ const char* print_js_exception(v8::Isolate* isolate, v8::TryCatch* try_catch, in
             v8::String::Utf8Value stack_trace(isolate, stack_trace_string);
             const char* stack_trace_string = *stack_trace;
             result.append(stack_trace_string);
-            result.append("\r\n");
+            result.append("\n");
         }
     }
 
@@ -103,7 +103,6 @@ void
 WINAPI
 v8_uninit()
 {
-    // v8::V8::Dispose();
     v8::V8::ShutdownPlatform();
     platform.release();
 }

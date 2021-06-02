@@ -77,8 +77,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>D:\vcpkg\installed\x86-windows-static\include\include;D:\vcpkg\installed\x86-windows-static\include;D:\vcpkg\installed\x86-windows\include\include;$(IncludePath)</IncludePath>
-    <ReferencePath>D:\vcpkg\installed\x86-windows-static\include;D:\vcpkg\installed\x86-windows\include\include;$(ReferencePath)</ReferencePath>
+    <IncludePath>D:\vcpkg\installed\x86-windows-static\include;D:\vcpkg\installed\x86-windows-static\include\include;$(IncludePath)</IncludePath>
+    <ReferencePath>$(ReferencePath)</ReferencePath>
     <LibraryPath>D:\vcpkg\installed\x86-windows-static\lib;$(LibraryPath)</LibraryPath>
     <GenerateManifest>true</GenerateManifest>
   </PropertyGroup>
